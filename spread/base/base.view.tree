@@ -1,4 +1,6 @@
 $bog_fragile_spread_base $mol_view
 	sub /
+		<= Head $mol_view
+			sub / \Шапка
 		<= Body $mol_view
 			sub / \Тело
