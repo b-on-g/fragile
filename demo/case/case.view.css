@@ -1,0 +1,4 @@
+[bog_fragile_demo_case] [mol_labeler_content] > * {
+	display: flex;
+	gap: .75rem;
+}

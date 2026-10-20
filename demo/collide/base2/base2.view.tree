@@ -1,0 +1,4 @@
+$bog_fragile_demo_collide_base2 $mol_view
+	sub /
+		<= icon \🔔
+		<= title \Файл

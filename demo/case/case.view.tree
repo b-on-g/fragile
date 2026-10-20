@@ -1,0 +1,19 @@
+$bog_fragile_demo_case $mol_section
+	level 2
+	text \
+	before $mol_view
+	after $mol_view
+	verdict \
+	content /
+		<= Text $mol_text
+			text <= text
+		<= Compare $mol_row
+			sub /
+				<= Before $mol_labeler
+					title \v1
+					content / <= before
+				<= After $mol_labeler
+					title \v2
+					content / <= after
+		<= Verdict $mol_text
+			text <= verdict

@@ -1,0 +1,112 @@
+$bog_fragile_demo $mol_page
+	title \Что ломается у наследников компонента на $mol
+	tools /
+		<= Source $mol_link_source
+			uri \https://github.com/b-on-g/fragile
+	body /
+		<= Intro $mol_text
+			text \
+				\Автор базового компонента его переделал, а наследников и владельцев никто не трогал. Слева компонент до переделки (v1), справа после (v2). Где сборка падает, справа ошибка компилятора: такой код до пользователя не доезжает.
+				\
+				\Код и скрипт проверки: [b-on-g/fragile](https://github.com/b-on-g/fragile), теги `v1` и `v2`.
+		<= Outer $bog_fragile_demo_case
+			title \Владелец настраивает вложенный виджет
+			text \
+				\```
+				\$bog_fragile_demo_outer_page $mol_view
+				\	sub /
+				\		<= Weather $bog_fragile_demo_outer_widget
+				\			city \Питер
+				\```
+				\В v2 виджет переименовал `city` в `location`.
+			before <= Outer1 $bog_fragile_demo_outer_page1
+			after <= Outer2 $mol_text
+				text \`error TS2339: Property 'city' does not exist on type '$bog_fragile_demo_outer_widget'.`
+			verdict \**Ловит компилятор.** На каждую привязку view.tree кладёт в d.ts проверку типа, двадцать мест дадут двадцать ошибок.
+		<= Retype $bog_fragile_demo_case
+			title \Родитель сменил тип свойства
+			text \
+				\```
+				\$bog_fragile_demo_retype_child $bog_fragile_demo_retype_base
+				\	limit 5
+				\```
+				\В v2 родитель объявил `limit \10`, строкой вместо числа.
+			before <= Retype1 $bog_fragile_demo_retype_child1
+			after <= Retype2 $mol_text
+				text \`error TS2416: Property 'limit' in type '$bog_fragile_demo_retype_child' is not assignable to the same property in base type '$bog_fragile_demo_retype_base'.`
+			verdict \**Ловит компилятор.**
+		<= Rename_ts $bog_fragile_demo_case
+			title \Родитель переименовал свойство, наследник в view.ts
+			text \
+				\```
+				\override heading() {
+				\	return "Наследник"
+				\}
+				\```
+				\В v2 родитель переименовал `heading` в `caption`.
+			before <= Rename_ts1 $bog_fragile_demo_rename_heir1
+			after <= Rename_ts2 $mol_text
+				text \`error TS4113: This member cannot have an 'override' modifier because it is not declared in the base class.`
+			verdict \**Ловит компилятор**, если написан `override`. Без него поведение как в следующем случае.
+		<= Rename_tree $bog_fragile_demo_case
+			title \Родитель переименовал свойство, наследник в view.tree
+			text \
+				\```
+				\$bog_fragile_demo_rename_tree $bog_fragile_demo_rename_base
+				\	heading \Наследник
+				\```
+				\В v2 родитель переименовал `heading` в `caption`.
+			before <= Rename_tree1 $bog_fragile_demo_rename_heir1
+			after <= Rename_tree2 $bog_fragile_demo_rename_heir2
+			verdict \**Ловит только тест наследника.** Сборка зелёная: во view.tree нет различия между «объявляю новое свойство» и «переопределяю свойство родителя», `heading` наследника просто стал новым свойством, которое никто не читает.
+		<= Collide $bog_fragile_demo_case
+			title \Родитель завёл свойство с тем же именем
+			text \
+				\```
+				\$bog_fragile_demo_collide_child $bog_fragile_demo_collide_base
+				\	sub /
+				\		^
+				\		<= Attach $mol_view
+				\			sub / <= icon \📎
+				\```
+				\В v2 родитель вывел в шапку свой `icon \🔔`.
+			before <= Collide1 $bog_fragile_demo_collide_child1
+			after <= Collide2 $bog_fragile_demo_collide_child2
+			verdict \**Не ловит ничего.** Скрепка наследника встала в шапку родителя вместо колокольчика.
+		<= Named $bog_fragile_demo_case
+			title \То же, но свойство названо по смыслу
+			text \
+				\```
+				\		<= Attach $mol_view
+				\			sub / <= attach_icon \📎
+				\```
+			before <= Named1 $bog_fragile_demo_collide_named1
+			after <= Named2 $bog_fragile_demo_collide_named2
+			verdict \**Не ломается.** Колокольчик в шапке, скрепка у вложения.
+		<= Plain $bog_fragile_demo_case
+			title \Наследник перечислил содержимое родителя руками
+			text \
+				\```
+				\$bog_fragile_demo_spread_plain $bog_fragile_demo_spread_base
+				\	sub /
+				\		<= Body
+				\		<= Extra $mol_view
+				\			sub / \Ещё
+				\```
+				\В v2 родитель добавил `Head` перед `Body`.
+			before <= Plain1 $bog_fragile_demo_spread_plain1
+			after <= Plain2 $bog_fragile_demo_spread_plain2
+			verdict \**Не ловит ничего.** Шапка родителя у наследника пропала, это и есть «забытый super».
+		<= Keep $bog_fragile_demo_case
+			title \То же, но содержимое родителя взято через ^
+			text \
+				\```
+				\	sub /
+				\		^
+				\		<= Extra $mol_view
+				\			sub / \Ещё
+				\```
+				\`^` разворачивается в `...super.sub()`.
+			before <= Keep1 $bog_fragile_demo_spread_keep1
+			after <= Keep2 $bog_fragile_demo_spread_keep2
+			verdict \**Не ломается.** Шапка родителя на месте.
