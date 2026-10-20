@@ -1,0 +1,10 @@
+{
+	"name": "bog_fragile_demo",
+	"short_name": "bog_fragile_demo",
+	"description": "",
+	"id": "bog_fragile_demo",
+	"start_url": ".",
+	"display": "standalone",
+	"background_color": "#000000",
+	"theme_color": "#000000"
+}
