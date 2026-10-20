@@ -1,0 +1,5 @@
+$bog_fragile_collide_named $bog_fragile_collide_base
+	sub /
+		^
+		<= Attach $mol_view
+			sub / <= attach_icon \📎

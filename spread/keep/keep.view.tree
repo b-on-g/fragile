@@ -1,0 +1,5 @@
+$bog_fragile_spread_keep $bog_fragile_spread_base
+	sub /
+		^
+		<= Extra $mol_view
+			sub / \Ещё

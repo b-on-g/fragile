@@ -1,0 +1,4 @@
+$bog_fragile_spread_base $mol_view
+	sub /
+		<= Body $mol_view
+			sub / \Тело

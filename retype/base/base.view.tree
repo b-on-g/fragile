@@ -1,0 +1,3 @@
+$bog_fragile_retype_base $mol_view
+	limit 10
+	sub / <= limit

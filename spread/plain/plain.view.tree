@@ -1,0 +1,5 @@
+$bog_fragile_spread_plain $bog_fragile_spread_base
+	sub /
+		<= Body
+		<= Extra $mol_view
+			sub / \Ещё

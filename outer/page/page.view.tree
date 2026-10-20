@@ -1,0 +1,4 @@
+$bog_fragile_outer_page $mol_view
+	sub /
+		<= Weather $bog_fragile_outer_widget
+			city \Питер
